@@ -1,0 +1,45 @@
+RewriteEngine On
+RewriteBase /spotly/
+
+# URL detail cafe
+RewriteRule ^detail/([a-zA-Z0-9-]+)/?$ detail.php?slug=$1 [L,QSA]
+
+# URL pencarian
+RewriteRule ^search/(.*)$ index.php?keyword=$1 [L,QSA,B]
+
+# URL sorting
+RewriteRule ^sort/(rating_tertinggi|rating_terendah|harga_termurah|harga_tertinggi|nama)/?$ index.php?sort=$1 [L,QSA]
+
+# Filter "Buka sekarang" (awalan /buka)
+RewriteRule ^buka/?$ index.php?buka=1 [L,QSA]
+RewriteRule ^buka/search/(.*)$ index.php?buka=1&keyword=$1 [L,QSA,B]
+RewriteRule ^buka/sort/(rating_tertinggi|rating_terendah|harga_termurah|harga_tertinggi|nama)/?$ index.php?buka=1&sort=$1 [L,QSA]
+
+# URL Admin Dashboard
+RewriteRule ^admin/dashboard/?$ app/controllers/CafeController.php?action=dashboard [L,QSA]
+
+# URL Admin Tambah Cafe
+RewriteRule ^tambah-kafe/?$ app/controllers/CafeController.php?action=tambah [L,QSA]
+
+# URL Admin Edit Cafe berdasarkan nama
+RewriteRule ^admin/edit/([a-zA-Z0-9-]+)/?$ app/controllers/CafeController.php?action=edit&slug=$1 [L,QSA]
+
+# URL Admin Update Cafe (proses simpan edit)
+RewriteRule ^admin/update/([0-9]+)/?$ app/controllers/CafeController.php?action=update&id=$1 [L,QSA]
+
+# URL Admin Hapus Cafe berdasarkan nama
+RewriteRule ^admin/hapus/([a-zA-Z0-9-]+)/?$ app/controllers/CafeController.php?action=hapus&slug=$1 [L,QSA]
+
+# Menghilangkan ekstensi .php
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.+)$ $1.php [L]
+
+# Redirect URL .php menjadi tanpa .php
+RewriteCond %{THE_REQUEST} \s/+spotly/([^\s?]+)\.php(?:[?\s])
+RewriteRule ^(.+)\.php$ /spotly/$1 [R=301,L]
+
+# Membuka file PHP tanpa ekstensi
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}\.php -f
+RewriteRule ^(.+)$ $1.php [L]
